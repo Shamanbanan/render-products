@@ -1,49 +1,64 @@
-window.onload = function () {
-  window.YaAuthSuggest.init(
-    {
-      client_id: "5c9a47c0935245e998c366d962e273d9",
-      response_type: "token",
-      redirect_uri: "https://examplesite.com/suggest/token"
-    },
-    "https://examplesite.com",
-    {
-      view: "button",
-      parentId: "container",
-      buttonView: "main",
-      buttonTheme: "light",
-      buttonSize: "m",
-      buttonBorderRadius: 0
-    }
-  )
-    .then(function (result) {
-      return result.handler();
-    })
-    .then(function (data) {
-      console.log("Сообщение с токеном: ", data);
-      document.body.innerHTML += `Сообщение с токеном: ${JSON.stringify(data)}`;
-    })
-    .catch(function (error) {
-      console.log("Что-то пошло не так: ", error);
-      document.body.innerHTML += `Что-то пошло не так: ${JSON.stringify(
-        error
-      )}`;
-    });
-};
-// Замените YOUR_ACCESS_TOKEN на ваш токен доступа
-const token = 'YOUR_ACCESS_TOKEN';
-const apiUrl = 'https://cloud-api.yandex.net/v1/disk/resources';
+// Замените 'YOUR_API_KEY' на ваш API-ключ Яндекс Диска
+const apiKey = "y0_AgAEA7qj-lkeAADLWwAAAADsgiLgkE6kJHAWTUSZvyjSNt0wdlWr_7U";
 
-fetch(`${apiUrl}/?path=/`, {
-  method: 'GET',
-  headers: {
-    'Authorization': `OAuth ${token}`,
-  },
-})
-  .then(response => response.json())
-  .then(data => {
-    // Обработка данных о файлов и папок
-    console.log(data);
-  })
-  .catch(error => {
-    console.error('Error fetching data from Yandex Disk:', error);
+// Функция для выполнения GET-запросов к API Яндекс Диска
+async function fetchData(url) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `OAuth ${apiKey}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Ошибка при запросе к API: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Произошла ошибка:", error);
+    throw error;
+  }
+}
+
+// Пример запроса к API для получения списка файлов в папке
+async function getImagesInFolder(folderPath) {
+  const apiUrl = `https://cloud-api.yandex.net/v1/disk/resources?path=${folderPath}`;
+  try {
+    const data = await fetchData(apiUrl);
+    return data;
+  } catch (error) {
+    // Обработайте ошибку
+  }
+}
+
+// Пример использования функции
+const folderPath = "/root/Фото"; // Замените на путь к папке с изображениями
+getImagesInFolder(folderPath).then((response) => {
+  // Отфильтруйте только изображения (например, по расширению файла)
+  const images = response._embedded.items.filter(
+    (item) => item.media_type === "image"
+  );
+  displayImages(images);
+});
+
+function displayImages(images) {
+  const imageContainer = document.getElementById("imageContainer");
+
+  // Очистите контейнер перед добавлением новых изображений
+  imageContainer.innerHTML = "";
+
+  images.forEach((image) => {
+    const imgElement = document.createElement("img");
+    imgElement.src = `https://webdav.yandex.ru${image.path}`;
+
+    imgElement.alt = image.name;
+
+    // Вставьте URL изображения в консоль для отладки
+    console.log("URL изображения:", image.file);
+
+    // Добавьте изображение в контейнер
+    imageContainer.appendChild(imgElement);
   });
+}
