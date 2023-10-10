@@ -1,15 +1,85 @@
-
-
     <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-      <div id="image-container"></div>
-      <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-      <script src="main.js"></script> -->
-    </body>
-    </html>
+<html lang="ru">
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>render</title>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <select id="seria-select" class="horizontal-select" multiple>
+        <option value="" >Сбросить</option>
+      </select>
+      <button id="downloadExcelButton">Скачать Excel</button>
+      <button id="showFilesButton">Посмотреть файлы</button>      
+      <div id="fileListModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Список файлов</h2>
+            <input type="checkbox"id="selectAllCheckbox">
+            <ul id="fileList"></ul>
+            <div id="progressContainer">
+              <div id="progressBar"></div>
+              <div id="progressText"></div>
+            </div>
+        </div> 
+    </div>
+    </header>
+    <main>
+      <div class="filter-container">
+        <button id="resetFiltersButton">Сбросить фильтры</button>
+        <div class="filter-column">
+        <fieldset>
+          <legend>Компоновка:</legend>
+            <select id="comp-select"  multiple>
+              <option value="">Сбросить</option>
+            </select>
+          </fieldset>
+        </div>
+          <div class="filter-column">
+          <fieldset>
+            <legend>Цвет:</legend>
+          <select id="color-select" multiple>
+            <option value="">Сбросить</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <legend>Цвет профиля:</legend>
+          <select id="profile-color-select"  multiple>
+            <option value="">Сбросить</option>
+          </select>
+        </fieldset>
+        </div>
+        <div class="filter-column">
+          <fieldset>
+            <legend>Высота:</legend>
+          <select id="height-select" multiple>
+            <option value="">Сбросить</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <legend>Ширина:</legend>
+          <select id="width-select"  multiple>
+            <option value="">Сбросить</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <legend>Глубина:</legend>
+          <select id="depth-select" multiple>
+            <option value="">Сбросить</option>
+          </select>
+        </fieldset>
+        </div>
+      </div>
+      <div id="images-container"></div>
+    </main>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
